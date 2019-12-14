@@ -1,10 +1,6 @@
 const Deact = require("../libs/Deact");
-const Http = require("../utils/Http");
-const UserCard = require('../components/UserCard')
-const Users = require('../components/Users')
 const HomePage = require('../components/HomePage')
 const NavBar = require('../components/NavBar')
-const Invitations = require('../components/InvitationCard')
 const LogIn = require('../components/LogIn')
 const RenderForm = require('../components/EventForm')
 const IntroScreen = require('../components/IntroScreen')
@@ -23,7 +19,6 @@ async function App (itemToRender) {
 
         case "IntroScreen":
             console.log("IntroScreen case!")
-            console.log(IntroScreen())
                 Deact.render(IntroScreen(), document.querySelector(".home-page-container") ) 
                 
                 const ButtonSelector = document.querySelector(".submit-button");
@@ -39,9 +34,7 @@ async function App (itemToRender) {
         break;
 
         case "HomePage":
-                console.log("HomePage case!")
-
-            Deact.render(await HomePage(), document.querySelector(".home-page-container"))            
+                await HomePage();         
         break;
 
         case "NavBar":

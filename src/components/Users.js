@@ -1,14 +1,12 @@
 const Deact = require('../libs/Deact')
 const Http = require('../utils/Http')
-const UserCard = require('./UserCard')
 const Invitations = require('./InvitationCard')
-const renderLogOutButton = require('./LogOutButton')
+const LogOutButton = require("./LogOutButton")
 
 module.exports = {
     
-    async renderUsers() { // test is going to call getRequest
+    async renderUsers() { 
    
-       
 
         const response = await Http.getRequest(`http://localhost:3000/users`)
          
@@ -20,7 +18,7 @@ module.exports = {
                     document.querySelector(".new-event").classList.add("show")
                     document.querySelector(".nav-bar").classList.add("show")
                     document.querySelector(".main-container").innerHTML = "";
-                    renderLogOutButton();
+                    LogOutButton();
                     await Invitations();
                 }
                     

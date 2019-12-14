@@ -2,16 +2,11 @@ const Deact = require('../libs/Deact')
 const Users = require('../components/Users')
 const Http = require('../utils/Http')
 const Items = require('./ItemCard')
-const ManageEvent=require('./ManageEvent')
+const ManageEvent=require('./ManageEvents')
 
 
 async function RenderEventForm () {
 
-    // Sets the user "Logged In" that's creating the Event
-    // Value is stored on the local browser
-    // localStorage.setItem("user", "5ddadb0a374676197cb2102a")
-    //     console.log(`Logged in as ${localStorage.getItem("user")}`)
-    
     document.querySelector('.main-container').innerHTML = "";
     function resetCheckboxes() {
         const checkedFriends  = document.querySelectorAll(".user-card.checked")

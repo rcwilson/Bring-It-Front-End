@@ -1,12 +1,8 @@
 const Deact = require("../libs/Deact")
-const renderApp = require("../index")
-const IntroScreen = require("./IntroScreen")
-const Users = require("./Users")
 
 function renderLogOutButton() {
-    console.log("running renderLogOutButton...")
     const button = Deact.create("div", {class:"log-out-button", onclick: logOut}, "Log Out");
-    return Deact.render(button, document.querySelector(".home-page__header"))
+    Deact.render(button, document.querySelector(".home-page__header"))
 
 }
 
@@ -19,7 +15,7 @@ async function logOut () {
     const logoutButton = document.querySelector(".log-out-button")
     logoutButton.parentNode.removeChild(logoutButton)
     // logout
-    localStorage.setItem("user", null)
+    localStorage.setItem("user", undefined)
    
     location.reload();
 

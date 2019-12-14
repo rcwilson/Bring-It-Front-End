@@ -4,19 +4,16 @@ const App = require("./components/App");
  async function renderApp(RenderThis) { Deact.render( await App(RenderThis), document.querySelector(".app"))}
 
 //  Login Reset
-//  localStorage.setItem("user", null)
-
-if (!localStorage.getItem("user") === null) {
-    // console.log(localStorage.getItem("user"))
-    // console.log("HomePage")
-    
-    //   renderApp("HomePage");  
-    
+//  localStorage.setItem("user", undefined)
+ 
+ const userLoggedIn = localStorage.getItem("user")
+ 
+if (userLoggedIn == "undefined") {
+    console.log("Intro")
+   renderApp("IntroScreen")
 } else {
-    // console.log(localStorage.getItem("user"))
-
-
-    renderApp("IntroScreen")
-    // .then renderApp("LogIn");
+    renderApp("HomePage")
+    console.log("Home Page")
+    
 
 }
