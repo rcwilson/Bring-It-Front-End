@@ -44,11 +44,6 @@ async function itemsList(eventId){
     
     const ItemCards = itemsArray.map(item => {
         
-        // return ( Deact.create("section", {class:"event-item-card"}, [
-        //             Deact.create("div", {class:"event-item-title"}, `${item.itemName}`), 
-        //             Deact.create("div", {class:"event-item-assigned"}, `You're bringing this!`)  
-        //         ]))
-
         const userLoggedIn = localStorage.getItem("user")
         console.log("userLoggedIn = " + userLoggedIn + "and item.itemName = " + item.assignedTo)
         if (userLoggedIn === item.assignedTo._id){
@@ -59,19 +54,20 @@ async function itemsList(eventId){
         } else {    
             return ( Deact.create("section", {class:"event-item-card"}, [
                 Deact.create("div", {class:"event-item-title"}, `${item.itemName}`), 
-                Deact.create("button", {name: `${item.name}`, type: "submit", onclick: handleSubmit, id:item._id}, "Bring It")  
+                Deact.create("button", {value: `${eventId}`, type: "submit", onclick: handleSubmit, id:item._id}, "Bring It")  
             ]))
         }
     })
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const itemId = e.target.id
-        const eventId = e.target.name
+        const eventId = e.target.value
+        console.log(eventId)
         const toBeAssignedTo = localStorage.getItem("user")
 
-        fetch(`http://localhost:3000/items/${itemId}/assigned`, {
+        await fetch(`http://localhost:3000/items/${itemId}/assigned`, {
             method: "PATCH",
             headers: {
                 "Content-type": "application/json"
@@ -79,15 +75,10 @@ async function itemsList(eventId){
             },
             body: JSON.stringify({toBeAssignedTo})
         })
-        .then(response => {
-            console.log("response to be assigned to = " + response)
-            console.log(localStorage.getItem("user"))
-            return response.json();
-        })
-        .then(() => {
-            // document.querySelector('"#' + `${userId}"`).innerHTML = "";
-            //  async () => { Deact.render(await ManageEvent(eventId), document.querySelector(".assignments")) }
-        } )
+           let Assignments = document.querySelector(".assignments")
+           Assignments.innerHTML = "";
+           Deact.render(await itemsList(eventId), Assignments)
+
 
     }
 
