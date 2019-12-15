@@ -27,7 +27,11 @@ async function App (itemToRender) {
         break;
 
         case "HomePage":
-                await HomePage();         
+                await HomePage();   
+                
+                document.addEventListener("click", (event) => {
+                    event.target.id
+                })
         break;
 
 

@@ -1,7 +1,6 @@
 const Deact = require('../libs/Deact')
 const Users = require('../components/Users')
 const NavBar = require('./NavBar')
-const Items = require('./ItemCard')
 const ManageEvents = require('./ManageEvents')
 
 
@@ -13,7 +12,6 @@ async function RenderEventForm () {
         checkedFriends.forEach(friend => {
             friend.classList.remove("checked")
         })
-
     }
     function getCheckedUserValues() {
         const usersNode = document.querySelectorAll(".user-checkbox:checked");
@@ -24,26 +22,9 @@ async function RenderEventForm () {
         })
         return userValues;    
     }
-    function getCheckedItemValues() {
-        const itemsNode = document.querySelectorAll(".item-checkbox:checked");
-        const itemsArray = [...itemsNode];
-        const itemsValues = [];
-        itemsArray.forEach(item => {
-            itemsValues.push(item.value)
-        })
-        return itemsValues;    
-    }
-
     function clearForm (){
         document.querySelector('.main-container').innerHTML = "";
     }
-    async function renderUsers (){
-        Deact.render(await LogIn(), document.querySelector(".home-page-container") )
-        Deact.create("section", {class:"main-container"}, [
-            await Users.renderUsers()
-        ])
-    }
-
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -54,7 +35,6 @@ async function RenderEventForm () {
         // need to add to form:
         const attendanceLimit = 20;
 
-        const items = getCheckedItemValues();
         const description = document.querySelector(".input-desc").value;
         const date = document.querySelector(".input-date").value;
         const location= document.querySelector(".input-location").value;
@@ -64,9 +44,9 @@ async function RenderEventForm () {
         const response = await fetch('http://localhost:3000/events', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title, hostId, guestList, attendanceLimit, items, description, date, location, theme })
+            body: JSON.stringify({ title, hostId, guestList, attendanceLimit, description, date, location, theme })
             })
-            
+
         newEvent = await response.json()
         newEventId = newEvent.response._id
 
@@ -93,11 +73,7 @@ async function RenderEventForm () {
 
                 ]),
                 Deact.create("h3", {}, "Select your friends to invite:"),
-                Deact.create("section", {class:"input-friends"}, await Users.renderFriendsCheckbox()),
-                Deact.create("div", {class:"input-items"}, [
-                    "checkboxes of items to bring",
-                    Deact.create("div", {class:"input-items__list"}, await Items.renderItemsCheckbox())
-                ]),
+                Deact.create("section", {class:"input-friends"}, await Users.renderFriendsCheckbox()),   
                 Deact.create("section", {class:"input-buttons-container"}, [
                     Deact.create ("button", {type: "submit", class:"event-submit"}, "SUBMIT!"),
                     Deact.create ("button", {type: "reset", onclick: resetCheckboxes, class: "event-reset"}, "Clear"),

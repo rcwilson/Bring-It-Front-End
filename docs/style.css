@@ -95,6 +95,7 @@ background: #888;
 
 .log-in-container {
 	
+	user-select: none;
 	position: absolute;
 	left: 0;
 	right: 0;
@@ -327,7 +328,7 @@ background: #888;
 	background-color: rgba(255, 255, 255, 0);
 	transition-duration: .5s;
 	/* font-size: 120%; */
-	transform: scale(1.4);
+	transform: perspective(10px) scale(1.4);
 	color: #330099;
 }
 

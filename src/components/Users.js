@@ -9,6 +9,7 @@ module.exports = {
        
         async function setLogIn(event) {
             const userId = event.target.id;
+            
 
             localStorage.setItem("user", userId)
             console.log(`Now logged in as ${localStorage.getItem("user")}`)
@@ -37,17 +38,20 @@ module.exports = {
             element.classList.toggle("checked")
         }
         const userArray = response.users.map(user => {
-            return Deact.create("label", {for: `${user._id}`, onclick: toggleChecked, class:"user-card"}, [
-                Deact.create("input", { type: "checkbox", class:"user-checkbox", id:`${user._id}`, value:`${user._id}`}, ""),
-                Deact.create("span", {class:"user-name"}, `${user.name}`),
-                Deact.create(
-                    "img",
-                    { class: `user-icon`, name: user.name, src: user.image, value: user._id },
-                    ""
-                  ) ]
-                    
-                ) 
-            })
+            if(localStorage.getItem("user") !== user._id) {
+                
+                return Deact.create("label", {for: `${user._id}`, onclick: toggleChecked, class:"user-card"}, [
+                    Deact.create("input", { type: "checkbox", class:"user-checkbox", id:`${user._id}`, value:`${user._id}`}, ""),
+                    Deact.create("span", {class:"user-name"}, `${user.name}`),
+                    Deact.create(
+                        "img",
+                        { class: `user-icon`, name: user.name, src: user.image, value: user._id },
+                        ""
+                    )])
+            } else {
+                return ""
+            }
+        })
                 
         return userArray
     }
