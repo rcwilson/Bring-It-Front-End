@@ -1,12 +1,16 @@
 const LogOutButton = require("./LogOutButton")
-const Invitations = require("./InvitationCard")
+const Navbar = require("./NavBar")
+const UserHeader = require("./UserHeader")
 
 
   async function HomePage () {
           document.querySelector(".new-event").classList.add("show")
           document.querySelector(".nav-bar").classList.add("show")
+          document.querySelector(".main-container").innerHTML = "";
           LogOutButton();
-          await Invitations();
+          UserHeader();
+          await Navbar.Invitations();
+          await Navbar.Hosting();
       }
   
   

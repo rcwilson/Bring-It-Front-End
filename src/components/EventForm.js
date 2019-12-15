@@ -1,8 +1,8 @@
 const Deact = require('../libs/Deact')
 const Users = require('../components/Users')
-const Http = require('../utils/Http')
+const NavBar = require('./NavBar')
 const Items = require('./ItemCard')
-const ManageEvent=require('./ManageEvents')
+const ManageEvents = require('./ManageEvents')
 
 
 async function RenderEventForm () {
@@ -44,7 +44,7 @@ async function RenderEventForm () {
         ])
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
 
         const title = document.querySelector(".input-name").value;
@@ -61,24 +61,21 @@ async function RenderEventForm () {
         const theme = document.querySelector(".input-theme").value;
         
 
-        fetch('http://localhost:3000/events', {
+        const response = await fetch('http://localhost:3000/events', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ title, hostId, guestList, attendanceLimit, items, description, date, location, theme })
-        })
-            .then(response => {
-                return response.json();
             })
-            .then(newEvent => {
+            
+        newEvent = await response.json()
+        newEventId = newEvent.response._id
 
-                // Needs to redirect to the New Event's page
-                document.querySelector('.main-container').innerHTML = "";
-                // console.log(newEvent)
-                ManageEvent(newEvent);
-
-            })
+        document.querySelector('.my-events-container').innerHTML = "";
+        document.querySelector('.main-container').innerHTML = "";
+        Deact.render(await ManageEvents(newEventId), document.querySelector('.main-container'));
+        await NavBar.Invitations()
+        await NavBar.Hosting()
+            
     }
 
     return Deact.create("article", {class:"event-form__container"}, [

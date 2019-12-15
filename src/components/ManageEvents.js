@@ -2,12 +2,9 @@ const Deact = require("../libs/Deact")
 const Http = require("../utils/Http")
 
 async function ManageEvent(eventId) {
-    // console.log(eventId);
     const response = await Http.getRequest(`http://localhost:3000/events/${eventId}/guestlist`)
     const event = response.event;
     
-
-
     document.querySelector('.main-container').innerHTML = "";
     return (Deact.create("div", {class:"main-container-event"}, [
        Deact.create("div", {class:"my-event"}, eventDetails(event)),

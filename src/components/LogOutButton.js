@@ -8,13 +8,9 @@ function renderLogOutButton() {
 
 async function logOut () {
     console.log('logging out...')
-    // Clearing Page
-    document.querySelector(".main-container").innerHTML = "";
-    document.querySelector(".new-event").classList.remove("show")
-    document.querySelector(".nav-bar").innerHTML = "";
-    const logoutButton = document.querySelector(".log-out-button")
-    logoutButton.parentNode.removeChild(logoutButton)
-    // logout
+    
+    document.querySelector(".app").innerHTML = "";
+
     localStorage.setItem("user", undefined)
    
     location.reload();
