@@ -36,13 +36,13 @@ async function hostDetails(hostId){
 
 async function itemsList(eventId){
     const response = await Http.getRequest(`http://localhost:3000/events/${eventId}/items`);
-    // console.log(response.event.items)
+    console.log(response.event.items)
     const itemsArray = response.event.items;
     
     const ItemCards = itemsArray.map(item => {
         
         const userLoggedIn = localStorage.getItem("user")
-        console.log("userLoggedIn = " + userLoggedIn + "and item.itemName = " + item.assignedTo)
+        
         if (userLoggedIn === item.assignedTo._id){
             return ( Deact.create("section", {class:"event-item-card"}, [
                 Deact.create("div", {class:"event-item-title"}, `${item.itemName}`), 
@@ -79,7 +79,7 @@ async function itemsList(eventId){
 
     }
 
-    const itemsContainer = Deact.create("ul", {class:"items__items-details"}, ItemCards)
+    const itemsContainer = Deact.create("table", {class:"items__items-details"}, ItemCards)
     
     return itemsContainer
 } 

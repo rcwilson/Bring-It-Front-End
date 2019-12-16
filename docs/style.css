@@ -150,7 +150,6 @@ background: #888;
 	height: 4rem;
 	border: 2px black solid;
 	padding: 1rem;
-
 }
 
 .main-container {
@@ -160,6 +159,7 @@ background: #888;
 	grid-area: main;
 	justify-content: center;
 	align-content: center;	
+	margin: auto;
 }
 .button-container {
 	position: absolute;
@@ -177,21 +177,20 @@ background: #888;
 	width: 100%;
 	height: 100%;
 	display: grid;
+    grid-template-columns: 10% 30% 20% 20% 20% ;
     grid-template-rows: 50% 50%;
-    grid-template-columns: 20% 20% 20% 20% 20% ;
-	grid-template-areas: "my-event my-event host host host" 
-	"attendees attendees assignments assignments assignments";
+	grid-template-areas: "host my-event 		assignments assignments assignments" 
+						"attendees attendees 	assignments assignments assignments";
     text-align: center;
     font-family: Lato, 'Sans Serif';
 }
 
 .event-item-card {
 	display: flex;
-	flex-flow: column wrap;
-	margin: 5%;
-	height: 30%;
-	width: 30%;
-	background-color: #6699ff6c;
+	flex-flow: row;
+	height: 10%;
+	width: 100%;
+	border-bottom: 2px solid black;
 }
 .event-item-card > button {
 	background-color: whitesmoke;
@@ -201,7 +200,7 @@ background: #888;
 
 .event-item-title {
 	margin: 5%;
-	font-size: 1.2rem;
+	font-size: .8rem;
 }
 
 .my-event {
@@ -217,12 +216,19 @@ background: #888;
 
 	background-color: whitesmoke;
 }
+.my-event::before {
+	content: "Event Details";
+	width: 100%;
+	color: white;
+	background-color: #330099;
+
+}
 
 .my-event,.host,.attendees,.assignments{
 	display:flex;
 	flex-direction:column;
-	justify-content: center;
 	align-items:center ;
+	margin: auto;
 }
 
 .my-event__event-details, .host__host-details{
@@ -257,10 +263,9 @@ background: #888;
 
 .attendees {
 	grid-area: attendees;
-	justify-self: center;
 	align-self: center;
-	width: 95%;
-	height: 95%;
+	width: 100%;
+	height: 100%;
 	box-shadow: 4px 4px 10px darkgray;
 	display: flex;
 	background-color: whitesmoke;
@@ -270,14 +275,18 @@ background: #888;
 
 .assignments {
 	grid-area: assignments;
-	justify-self: center;
 	align-self: center;
-	width: 98%;
+	width: 90%;
 	height: 90%;
 	box-shadow: 4px 4px 10px darkgray;
-	/* padding: 1px; */
-	 background-color: whitesmoke; 
-	 overflow-y: scroll;
+	margin: auto;
+	background-color: whitesmoke; 
+}
+.assignments::before{
+	content: "Items Needed";
+	background-color: #330099;
+	color: white;
+	width: 100%;
 }
 
 .footer {
@@ -394,7 +403,7 @@ background: #888;
 }
 
 .host__image{
-	width: 15%;
+	width: 80%;
 	height: auto;
 	border-radius: 15%;
 }
@@ -422,16 +431,16 @@ background: #888;
 	right: 0;
 }
 .attendees__list{
-	height: 90%;
+	height: 100%;
 	display: flex;
 	flex-flow: column wrap;
 	justify-content: center;
 	align-items: center;
-	max-width: 600 px;
-
+	width: 100%;
 	flex-direction: row;
 	flex-wrap: wrap;
-	overflow-x: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 .attendees::before {
 	background-color: #330099;
@@ -445,5 +454,5 @@ background: #888;
 	width: 80%;
 	height: 100%;
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: column;
 }
