@@ -186,8 +186,6 @@ background: #888;
 }
 
 .event-item-card {
-	display: flex;
-	flex-flow: row;
 	height: 10%;
 	width: 100%;
 	border-bottom: 2px solid black;
@@ -198,11 +196,21 @@ background: #888;
 	border-radius: 10px;
 }
 
-.event-item-title {
-	margin: 5%;
-	font-size: .8rem;
+.event-item-name {
+	
+	font-size: 1rem;
 }
-
+.event-item-form {
+	display: flex;
+	flex-flow: row nowrap;
+	align-content: center;
+	justify-content: center;
+	width: 100%;
+	margin: 1rem auto;
+}
+.event-item-input {
+	width: 80%;
+}
 .my-event {
 	grid-area: my-event;
 	justify-self: center;
@@ -451,8 +459,8 @@ background: #888;
 	content: "Attendees";
 }
 .items__items-details {
-	width: 80%;
-	height: 100%;
-	display: flex;
-	flex-flow: column;
+	width: 100%;
+}
+table {
+	border-collapse: collapse;
 }

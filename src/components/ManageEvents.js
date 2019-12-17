@@ -10,7 +10,9 @@ async function ManageEvent(eventId) {
        Deact.create("div", {class:"my-event"}, eventDetails(event)),
         Deact.create("div", {class:"host"}, await hostDetails(event.hostId) ),
         Deact.create("div", {class:"attendees"}, inviteesList(event)),
-        Deact.create("div", {class:"assignments"}, await itemsList(eventId) ),
+        Deact.create("div", {class:"assignments"}, [
+            ItemsForm(eventId),
+            await ItemsList(eventId)] ),
         
 ]))}
 function eventDetails(event) {
@@ -33,10 +35,37 @@ async function hostDetails(hostId){
     ])
     return Host
 } 
+function ItemsForm(eventId) {
+    return Deact.create("form", {class: "event-item-form", id: eventId}, [ItemsInput(), ItemsButton()])
+}
+function ItemsInput() {
+    return Deact.create("input", {type: "text", class: "event-item-input", placeholder: "New Item to Bring"},"")
+}
+function ItemsButton() {
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-async function itemsList(eventId){
+        const itemName = document.querySelector(".event-item-input").value;
+        const eventId = document.querySelector(".event-item-form").id
+        const assignedTo = localStorage.getItem("user");
+
+        console.log(itemName, assignedTo, eventId)
+        const response = await fetch('http://localhost:3000/items', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ eventId, itemName, assignedTo})
+        })
+        newItem = await response.json();
+        let Assignments = document.querySelector(".assignments")
+           Assignments.innerHTML = "";
+           Deact.render(ItemsForm(eventId), Assignments)
+           Deact.render(await ItemsList(eventId), Assignments)
+    }
+    return  Deact.create("button", {type: "submit", class: "event-item-button", onclick: handleSubmit}, "New Item")
+}
+
+async function ItemsList(eventId){
     const response = await Http.getRequest(`http://localhost:3000/events/${eventId}/items`);
-    console.log(response.event.items)
     const itemsArray = response.event.items;
     
     const ItemCards = itemsArray.map(item => {
@@ -44,14 +73,24 @@ async function itemsList(eventId){
         const userLoggedIn = localStorage.getItem("user")
         
         if (userLoggedIn === item.assignedTo._id){
-            return ( Deact.create("section", {class:"event-item-card"}, [
-                Deact.create("div", {class:"event-item-title"}, `${item.itemName}`), 
-                Deact.create("div", {class:"event-item-assigned"}, `You're bringing this!`)  
+            return ( Deact.create("tr", {class:"event-item-card"}, [
+                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`), 
+                Deact.create("td", {class:"event-item-category"}, `${item.category}`), 
+                Deact.create("td", {class:"event-item-assigned"}, `You're bringing this!`)  
             ]))
-        } else {    
-            return ( Deact.create("section", {class:"event-item-card"}, [
-                Deact.create("div", {class:"event-item-title"}, `${item.itemName}`), 
+        } 
+        if (item.assignedTo === undefined) {
+            return ( Deact.create("tr", {class:"event-item-card"}, [
+                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`),
+                Deact.create("td", {class:"event-item-category"}, `${item.category}`),  
                 Deact.create("button", {value: `${eventId}`, type: "submit", onclick: handleSubmit, id:item._id}, "Bring It")  
+            ]))
+        }        
+        else {    
+            return ( Deact.create("tr", {class:"event-item-card"}, [
+                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`), 
+                Deact.create("td", {class:"event-item-category"}, `${item.category}`), 
+                Deact.create("td", {value: item.assignedTo._id,  id:item._id}, `${item.assignedTo.name}`)  
             ]))
         }
     })
@@ -74,14 +113,25 @@ async function itemsList(eventId){
         })
            let Assignments = document.querySelector(".assignments")
            Assignments.innerHTML = "";
-           Deact.render(await itemsList(eventId), Assignments)
-
-
+           Deact.render(ItemsForm(eventId), Assignments)
+           Deact.render(await ItemsList(eventId), Assignments)
     }
 
-    const itemsContainer = Deact.create("table", {class:"items__items-details"}, ItemCards)
+    const ItemHeaderName = Deact.create("th",  {class: "items__item-header"}, "Item Name")
+    const ItemHeaderAssignedTo = Deact.create("th",  {class: "items__item-header"}, "Assigned To")
+    const ItemHeaderCategory = Deact.create("th",  {class: "items__item-header"}, "Category")
+    const ItemHeaders = Deact.create("tr", {class:"items__item-headers"}, [
+        ItemHeaderName,
+        ItemHeaderCategory,
+        ItemHeaderAssignedTo
+    ])
+
+    const ItemsContainer = Deact.create("table", {class:"items__items-details"},  ItemHeaders)
+    ItemCards.forEach(item => {
+        Deact.render(item, ItemsContainer)
+    })
     
-    return itemsContainer
+    return ItemsContainer
 } 
 
 function inviteesList (event) {
