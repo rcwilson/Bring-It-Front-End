@@ -6,7 +6,7 @@ const ManageEvents = require('./ManageEvents')
 
 async function RenderEventForm () {
 
-    document.querySelector('.main-container').innerHTML = "";
+    // document.querySelector('.main-container').innerHTML = "";
     function resetCheckboxes() {
         const checkedFriends  = document.querySelectorAll(".user-card.checked")
         checkedFriends.forEach(friend => {
@@ -22,8 +22,8 @@ async function RenderEventForm () {
         })
         return userValues;    
     }
-    function clearForm (){
-        document.querySelector('.main-container').innerHTML = "";
+    function closeForm (){
+        document.querySelector('.modal').innerHTML = "";
     }
     async function handleSubmit(e) {
         e.preventDefault();
@@ -52,6 +52,7 @@ async function RenderEventForm () {
 
         document.querySelector('.my-events-container').innerHTML = "";
         document.querySelector('.main-container').innerHTML = "";
+        document.querySelector('.modal').innerHTML = "";
         Deact.render(await ManageEvents(newEventId), document.querySelector('.main-container'));
         await NavBar.Invitations()
         await NavBar.Hosting()
@@ -75,9 +76,9 @@ async function RenderEventForm () {
                 Deact.create("h3", {}, "Select your friends to invite:"),
                 Deact.create("section", {class:"input-friends"}, await Users.renderFriendsCheckbox()),   
                 Deact.create("section", {class:"input-buttons-container"}, [
-                    Deact.create ("button", {type: "submit", class:"event-submit"}, "SUBMIT!"),
+                    Deact.create ("button", {type: "button", onclick: closeForm }, "Close"),
                     Deact.create ("button", {type: "reset", onclick: resetCheckboxes, class: "event-reset"}, "Clear"),
-                    Deact.create ("button", {onclick: clearForm }, "Go back")
+                    Deact.create ("button", {type: "submit", class:"event-submit"}, "SUBMIT!"),
                 ])
                 
             ])

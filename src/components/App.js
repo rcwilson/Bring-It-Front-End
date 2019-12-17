@@ -9,7 +9,7 @@ const IntroScreen = require('../components/IntroScreen')
 document.querySelector(".new-event").addEventListener('click', renderEventForm)
 
 async function renderEventForm() {
-    Deact.render(await RenderForm(), document.querySelector('.main-container') )
+    Deact.render(await RenderForm(), document.querySelector('.modal') )
 }
 
 async function App (itemToRender) {

@@ -189,6 +189,10 @@ background: #888;
 	height: 10%;
 	width: 100%;
 	border-bottom: 2px solid black;
+	background-color: white;
+	color: #330099;
+	font-size: 1rem;
+	padding: .5rem;
 }
 .event-item-card > button {
 	background-color: whitesmoke;
@@ -197,8 +201,11 @@ background: #888;
 }
 
 .event-item-name {
-	
-	font-size: 1rem;
+	color: white;
+	background-color: #6699ff;
+	border-radius: 10px;
+	font-size: 1.1rem;
+	margin: .5rem 0;
 }
 .event-item-form {
 	display: flex;
@@ -209,19 +216,39 @@ background: #888;
 	margin: 1rem auto;
 }
 .event-item-input {
-	width: 80%;
+	width: 50%;
+	border-radius: 10px;
+	font-size: 100%;
+}
+.event-item-input:focus, .event-item-category-dropdown:focus{
+	background-color: #6699ff50;
+	outline: none;
+}
+.event-item-category-dropdown {
+	border-radius: 10px;
+	font-family: Lato, sans-serif;
+}
+.event-item-button {
+	cursor: pointer;
+	border: none;
+	border-radius: 8px;
+	background-color: #6699ff;
+	color: white;
+	font-family: Lato, sans-serif;
+}
+.event-item-button:hover {
+	background-color: #330099;
+}
+.event-item-button:focus {
+	outline: none;
 }
 .my-event {
 	grid-area: my-event;
 	justify-self: center;
 	align-self: center;
-	width: 95%;
+	width: 90%;
 	height: 95%;
-
-	/* box-shadow: 10px 5px 5px black; */
 	box-shadow: 4px 4px 10px darkgray;
-	/* padding: 1px; */
-
 	background-color: whitesmoke;
 }
 .my-event::before {
@@ -241,13 +268,16 @@ background: #888;
 
 .my-event__event-details, .host__host-details{
 
-	width: 100%;
+	
 	height: 100%;
 	display: flex;
 	flex-flow: column wrap;
+	justify-content: space-evenly;
 	align-content: center;
-	/* background-color: red;  */
-	font-size: 1.5em;
+	font-size: 1.2em;
+}
+.my-event__title {
+	font-size: 2rem;
 }
 .host::before{
 	content: "Hosted By";
@@ -459,7 +489,7 @@ background: #888;
 	content: "Attendees";
 }
 .items__items-details {
-	width: 100%;
+	width: 90%;
 }
 table {
 	border-collapse: collapse;

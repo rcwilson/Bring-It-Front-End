@@ -170,7 +170,7 @@ input, textarea{
     color: rgb(255, 255, 255);
 }
 .input-buttons-container > button:hover{
-    background-color: rgb(187, 0, 0);
+    background-color: #330099;
     color: white;
 }
 

@@ -17,10 +17,11 @@ async function ManageEvent(eventId) {
 ]))}
 function eventDetails(event) {
 
-    const myEventDetails = Deact.create("div", {class:"my-event__event-details"},[
-        Deact.create("p", {class:"my-event__title"}, `${event.title}`),
-        Deact.create("p", {class:"my-event__date"}, `${event.date}`),
-        Deact.create("p", {class:"my-event__details"}, `${event.description}`)
+    const myEventDetails = Deact.create("section", {class:"my-event__event-details"},[
+        Deact.create("section", {class:"my-event__title"}, event.title),
+        Deact.create("section", {class:"my-event__date"}, event.date),
+        Deact.create("section", {class: "my-event__theme"}, event.theme),
+        Deact.create("section", {class:"my-event__details"}, event.description)
     ])
     return myEventDetails  
 }
@@ -36,64 +37,75 @@ async function hostDetails(hostId){
     return Host
 } 
 function ItemsForm(eventId) {
-    return Deact.create("form", {class: "event-item-form", id: eventId}, [ItemsInput(), ItemsButton()])
-}
-function ItemsInput() {
-    return Deact.create("input", {type: "text", class: "event-item-input", placeholder: "New Item to Bring"},"")
-}
-function ItemsButton() {
     async function handleSubmit(e) {
         e.preventDefault();
 
         const itemName = document.querySelector(".event-item-input").value;
-        const eventId = document.querySelector(".event-item-form").id
+        const eventId = document.querySelector(".event-item-form").id;
+        const category = document.querySelector(".event-item-category-dropdown").value;
         const assignedTo = localStorage.getItem("user");
 
-        console.log(itemName, assignedTo, eventId)
+        console.log(itemName, assignedTo, category, eventId)
         const response = await fetch('http://localhost:3000/items', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ eventId, itemName, assignedTo})
+            body: JSON.stringify({ eventId, itemName, assignedTo, category})
         })
         newItem = await response.json();
+        console.log(newItem)
         let Assignments = document.querySelector(".assignments")
            Assignments.innerHTML = "";
            Deact.render(ItemsForm(eventId), Assignments)
            Deact.render(await ItemsList(eventId), Assignments)
     }
-    return  Deact.create("button", {type: "submit", class: "event-item-button", onclick: handleSubmit}, "New Item")
+    return Deact.create("form", {class: "event-item-form", id: eventId, onsubmit: handleSubmit}, [ItemsInputName(), ItemsInputCategory(), NewItemButton()])
+}
+function ItemsInputName() {
+    return Deact.create("input", {type: "text", class: "event-item-input", placeholder: "New Item to Bring", required:"required"},"")
+}
+function ItemsInputCategory() {
+    return Deact.create("select", {class: "event-item-category-dropdown"}, [
+        Deact.create("option", {value: "Appetizer"}, "Appetizer"),
+        Deact.create("option", {value: "Main Dish"}, "Main Dish"),
+        Deact.create("option", {value: "Soup"}, "Soup"),
+        Deact.create("option", {value: "Salad"}, "Salad"),
+        Deact.create("option", {value: "Dessert"}, "Dessert"),
+        Deact.create("option", {value: "Alchohol"}, "Alchohol"),
+        Deact.create("option", {value: "Non-Alc Beverage"}, "Non-Alc Beverage"),
+        Deact.create("option", {value: "Supplies"}, "Supplies"),
+        Deact.create("option", {value: "Other"}, "Other"),
+    ])
+}
+function NewItemButton() {
+    
+    return  Deact.create("button", {type: "submit", class: "event-item-button"}, "New Item")
 }
 
 async function ItemsList(eventId){
     const response = await Http.getRequest(`http://localhost:3000/events/${eventId}/items`);
     const itemsArray = response.event.items;
     
-    const ItemCards = itemsArray.map(item => {
-        
+    function handleAssignedTo(item) {
         const userLoggedIn = localStorage.getItem("user")
-        
-        if (userLoggedIn === item.assignedTo._id){
-            return ( Deact.create("tr", {class:"event-item-card"}, [
-                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`), 
-                Deact.create("td", {class:"event-item-category"}, `${item.category}`), 
-                Deact.create("td", {class:"event-item-assigned"}, `You're bringing this!`)  
-            ]))
-        } 
-        if (item.assignedTo === undefined) {
-            return ( Deact.create("tr", {class:"event-item-card"}, [
-                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`),
-                Deact.create("td", {class:"event-item-category"}, `${item.category}`),  
-                Deact.create("button", {value: `${eventId}`, type: "submit", onclick: handleSubmit, id:item._id}, "Bring It")  
-            ]))
-        }        
-        else {    
-            return ( Deact.create("tr", {class:"event-item-card"}, [
-                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`), 
-                Deact.create("td", {class:"event-item-category"}, `${item.category}`), 
-                Deact.create("td", {value: item.assignedTo._id,  id:item._id}, `${item.assignedTo.name}`)  
-            ]))
+
+        if (item.assignedTo === null) {
+           return Deact.create("button", {value: `${eventId}`, type: "submit", onclick: handleSubmit, id:item._id}, "Bring It")  
         }
-    })
+        if (userLoggedIn === item.assignedTo._id){
+            return Deact.create("td", {class:"event-item-assigned"}, `You're bringing this!`) 
+        }   
+        else {
+            return Deact.create("td", {value: item.assignedTo._id,  id:item._id}, `${item.assignedTo.name}`)  
+        }
+    }
+    const ItemCards = itemsArray.map(item => {
+            return ( Deact.create("tr", {class:"event-item-card"}, [
+                Deact.create("td", {class:"event-item-name"}, `${item.itemName}`), 
+                Deact.create("td", {class:"event-item-category"}, `${item.category}`), 
+                handleAssignedTo(item)
+            ]))
+        }) 
+       
 
     async function handleSubmit(e) {
         e.preventDefault();
